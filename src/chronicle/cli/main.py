@@ -1,6 +1,7 @@
 import typer
 from chronicle.cli.commands.init import init
 from chronicle.cli.commands.version import version
+from chronicle.cli.commands.status import status
 
 app = typer.Typer(
     name="chronicle",
@@ -10,6 +11,7 @@ app = typer.Typer(
   
 app.command(name="init")(init)
 app.command(name="version")(version)
+app.command(name="status")(status)
     
 def main():
     app()
