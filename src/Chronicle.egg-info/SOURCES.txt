@@ -9,3 +9,8 @@ src/Chronicle.egg-info/top_level.txt
 src/chronicle/__init__.py
 src/chronicle/cli/__init__.py
 src/chronicle/cli/main.py
+src/chronicle/cli/commands/__init__.py
+src/chronicle/cli/commands/init.py
+src/chronicle/cli/commands/version.py
+src/chronicle/project/__init__.py
+src/chronicle/project/discovery.py

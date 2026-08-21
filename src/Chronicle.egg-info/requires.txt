@@ -1,1 +1,4 @@
 typer>=0.16
+
+[dev]
+pytest>=8.0

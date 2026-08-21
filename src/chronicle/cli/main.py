@@ -5,6 +5,7 @@ from chronicle.cli.commands.version import version
 app = typer.Typer(
     name="chronicle",
     help="Local-first developer intelligence tool.",
+    no_args_is_help=True,
 )
   
 app.command(name="init")(init)
