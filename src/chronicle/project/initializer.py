@@ -6,8 +6,9 @@ def initialize_chronicle(project_root:Path) -> Path:
     chronicle_directory.mkdir(parents=True,exist_ok=True)
     
     config_path = get_config_path(project_root)
-    config_path.write_text(
-        "[chronicle]\nversion = 1\n"
-    )
+    if not config_path.exists():
+        config_path.write_text(
+            "[chronicle]\nversion = 1\n"
+        )
     
     return config_path
