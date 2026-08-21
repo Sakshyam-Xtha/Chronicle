@@ -11,7 +11,10 @@ def init():
         typer.echo(f"Error: No .git files found in the current working directory",err=True)
         raise typer.Exit(code=1)
     
-    config_path = initialize_chronicle(project_root)
+    config_path,created = initialize_chronicle(project_root)
     
-    typer.echo(f"Chronicle initiated at: {project_root}")
+    if created:
+        typer.echo(f"Chronicle initiated at: {project_root}")
+    else:
+        typer.echo(f"Chronicle already initiated at: {project_root}")
     typer.echo(f"Configuration at: {config_path}")
