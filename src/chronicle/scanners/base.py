@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 from .models import Observation
+from chronicle.scanning.context import ScanContext
 
 class Scanner(ABC):
     """Base class for all chronicle scanners."""
@@ -10,6 +11,6 @@ class Scanner(ABC):
         self.project_root = project_root
         
     @abstractmethod
-    def scan(self) -> list[Observation]:
+    def scan(self,context:ScanContext) -> list[Observation]:
         """Scan the project and return observation"""
-        raise NotImplementedError
+        pass

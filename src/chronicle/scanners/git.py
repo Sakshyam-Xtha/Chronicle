@@ -4,6 +4,7 @@ from datetime import datetime
 from chronicle.integrations.git import GitIntegration
 from .models import Observation
 from .base import Scanner
+from chronicle.scanning.context import ScanContext
 
 class GitScanner(Scanner):
     """Scanner for Git repo history."""
@@ -12,12 +13,20 @@ class GitScanner(Scanner):
         super().__init__(project_root)
         self.git = GitIntegration(project_root)
     
-    def scan(self) -> list[Observation]:
+    def scan(self,context:ScanContext) -> list[Observation]:
+        last_commit = context.state.get("git.last_commit")
         try:
-            output = self.git.run(
-                "log",
-                "--format=%H|%aI|%s",
-            )
+            if last_commit:
+                output = self.git.run(
+                    "log",
+                    f"{last_commit}..HEAD",
+                    "--format=%H|%aI|%s",
+                )
+            else:
+                output = self.git.run(
+                    "log",
+                    "--format=%H|%aI|%s",
+                )
         except subprocess.CalledProcessError:
             return []
         observation:list[Observation] = []

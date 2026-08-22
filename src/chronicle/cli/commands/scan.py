@@ -6,6 +6,8 @@ from chronicle.config.loader import get_chronicle_directory
 from chronicle.storage.schema import init_schema
 from chronicle.storage.database import connect
 from chronicle.storage.observations import ObservationRepo
+from chronicle.storage.scan_state import ScanStateRepo
+from chronicle.scanning.context import ScanContext
 
 def scan():
     """Scan the project and collect observation"""
@@ -17,8 +19,17 @@ def scan():
     db_path = (get_chronicle_directory(project_root) / "chronicle.db")
     connection = connect(database_path=db_path)
     init_schema(connection=connection)
+    scan_state = ScanStateRepo(connection)
     repo = ObservationRepo(connection)
-    
+    last_commit = scan_state.get(
+        "last_commit",
+        "git",
+    )
+    context = ScanContext(
+        state={
+            "git.last_commit":last_commit,
+        }
+    )
     
     scanners = [
         GitScanner(project_root),
@@ -29,7 +40,7 @@ def scan():
         scanners=scanners, #type: ignore
     )
     
-    observations = engine.scan()
+    observations = engine.scan(context=context)
     
     created_count = 0
     

@@ -10,6 +10,14 @@ CREATE TABLE IF NOT EXISTS observations(
     data TEXT NOT NULL,
     UNIQUE(source,type,external_id)
 );
+
+CREATE TABLE IF NOT EXISTS scan_state(
+    scanner TEXT NOT NULL,
+    key TEXT NOT NULL,
+    value TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY(scanner , key)
+)
 """
 
 def init_schema(connection:sqlite3.Connection) -> None:
