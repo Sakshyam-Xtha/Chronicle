@@ -2,6 +2,10 @@ import typer
 from chronicle.project.discovery import find_project_root
 from chronicle.scanners.git import GitScanner
 from chronicle.scanning.engine import ScanEngine
+from chronicle.config.loader import get_chronicle_directory
+from chronicle.storage.schema import init_schema
+from chronicle.storage.database import connect
+from chronicle.storage.observations import ObservationRepo
 
 def scan():
     """Scan the project and collect observation"""
@@ -10,14 +14,34 @@ def scan():
         typer.echo("Error: could not find git repo.",err=True)
         raise typer.Exit(code=1)
     
+    db_path = (get_chronicle_directory(project_root) / "chronicle.db")
+    connection = connect(database_path=db_path)
+    init_schema(connection=connection)
+    repo = ObservationRepo(connection)
+    
+    
     scanners = [
         GitScanner(project_root),
     ]
     
     engine = ScanEngine(
         project_root=project_root,
-        scanners=scanners,
+        scanners=scanners, #type: ignore
     )
     
-    observation = engine.scan()
-    typer.echo(f"Collected {len(observation)} observation(s).")
+    observations = engine.scan()
+    
+    created_count = 0
+    
+    for observation in observations:
+        if repo.save(observation=observation):
+            created_count+=1
+        
+    connection.close()
+    
+    if created_count > 0:
+        typer.echo(f"Collected {len(observations)} observation(s).")
+        typer.echo(f"Stored {created_count} new observation(s)")
+    else:
+        typer.echo(f"Collected {len(observations)} observation(s).")
+        typer.echo(f"All observation(s) already stored.")

@@ -13,26 +13,26 @@ class GitScanner(Scanner):
         self.git = GitIntegration(project_root)
     
     def scan(self) -> list[Observation]:
-        try:
-            output = self.git.run(
-                "log",
-                "-1",
-                "--format=%H|%aI|%s",
-            )
-        except subprocess.CalledProcessError:
-            return []
-        line = output.strip()
-        if not line:
-            return []
-        
-        commit_hash, timestamp, msg = line.split("|",2)
-        observation = Observation(
-            source="git",
-            type="commit",
-            timestamp=datetime.fromisoformat(timestamp),
-            data={
-                "hash":commit_hash,
-                "message":msg
-            }
+        output = self.git.run(
+            "log",
+            "--format=%H|%aI|%s",
         )
-        return [observation]
+        observation:list[Observation] = []
+        for line in output.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            
+            commit_hash, timestamp, msg = line.split("|",2)
+            observation.append(Observation(
+                source="git",
+                type="commit",
+                external_id=commit_hash,
+                timestamp=datetime.fromisoformat(timestamp),
+                data={
+                    "hash":commit_hash,
+                    "message":msg
+                }
+            ))
+            
+        return observation
