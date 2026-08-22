@@ -7,6 +7,7 @@ def status():
     project_status=get_status()
     if project_status is None:
         typer.echo("Error: could not find a Git repo in the project.")
+        raise typer.Exit(code=1)
     
     typer.echo("")    
     typer.echo(f"Project: {project_status.project_root.name}")    
