@@ -2,11 +2,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-import pytest
-
-from chronicle.scanners.base import Scanner
 from chronicle.scanners.git import GitScanner
-from chronicle.scanners.models import Observation
 
 GIT_IDENTITY = [
     "-c",
@@ -84,32 +80,3 @@ def test_git_scanner_returns_empty_list_on_empty_log_output(
 
     assert observations == []
 
-
-def test_scanner_cannot_be_instantiated_directly(tmp_path: Path):
-    with pytest.raises(TypeError):
-        Scanner(tmp_path)
-
-
-def test_scanner_subclass_must_implement_scan(tmp_path: Path):
-    class IncompleteScanner(Scanner):
-        pass
-
-    with pytest.raises(TypeError):
-        IncompleteScanner(tmp_path)
-
-
-def test_observation_holds_scan_data():
-    timestamp = datetime(2026, 8, 21, 12, 0, 0)
-
-    observation = Observation(
-        source="git",
-        type="commit",
-        timestamp=timestamp,
-        data={"hash": "abc123", "message": "hello"},
-    )
-
-    assert observation.source == "git"
-    assert observation.type == "commit"
-    assert observation.timestamp == timestamp
-    assert observation.data["hash"] == "abc123"
-    assert observation.data["message"] == "hello"

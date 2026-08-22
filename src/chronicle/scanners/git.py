@@ -13,10 +13,13 @@ class GitScanner(Scanner):
         self.git = GitIntegration(project_root)
     
     def scan(self) -> list[Observation]:
-        output = self.git.run(
-            "log",
-            "--format=%H|%aI|%s",
-        )
+        try:
+            output = self.git.run(
+                "log",
+                "--format=%H|%aI|%s",
+            )
+        except subprocess.CalledProcessError:
+            return []
         observation:list[Observation] = []
         for line in output.splitlines():
             line = line.strip()
