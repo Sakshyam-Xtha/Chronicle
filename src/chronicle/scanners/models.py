@@ -8,3 +8,4 @@ class Observation:
     external_id:str 
     timestamp:datetime
     data:dict
+    id:int | None = None

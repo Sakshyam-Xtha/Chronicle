@@ -14,7 +14,23 @@ def init():
     config_path,created = initialize_chronicle(project_root)
     
     if created:
-        typer.echo(f"Chronicle initiated at: {project_root}")
+        typer.echo()
+        typer.echo("   ╔══════════════════════════════════════╗")
+        typer.echo("   ║          C H R O N I C L E           ║")
+        typer.echo("   ╚══════════════════════════════════════╝")
+        typer.echo()
+
+        typer.echo("   ✦ Initializing Chronicle...")
+        typer.echo()
+
+        typer.echo("   ✓ Project detected")
+        typer.echo("   ✓ Chronicle directory created")
+        typer.echo("   ✓ Local database initialized")
+        typer.echo()
+
+        typer.echo("   Chronicle is ready.")
+        typer.echo()
+        typer.echo("   Run `chronicle scan` to begin collecting observations.")
+        typer.echo()
     else:
         typer.echo(f"Chronicle already initiated at: {project_root}")
-    typer.echo(f"Configuration at: {config_path}")
