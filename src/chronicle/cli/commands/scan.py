@@ -1,6 +1,7 @@
 import typer
 from chronicle.project.discovery import find_project_root
 from chronicle.scanners.git import GitScanner
+from chronicle.scanners.django_migrations import DjangoMigrationScanner
 from chronicle.scanning.engine import ScanEngine
 from chronicle.config.loader import get_chronicle_directory
 from chronicle.storage.schema import init_schema
@@ -33,6 +34,7 @@ def scan():
     
     scanners = [
         GitScanner(project_root),
+        DjangoMigrationScanner(project_root)
     ]
     
     engine = ScanEngine(
