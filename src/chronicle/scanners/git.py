@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime
 from chronicle.integrations.git import GitIntegration
 from .models import Observation
+from .git_models import FileChange
 from .base import Scanner
 from chronicle.scanning.context import ScanContext
 
@@ -14,18 +15,18 @@ class GitScanner(Scanner):
         self.git = GitIntegration(project_root)
     
     def scan(self,context:ScanContext) -> list[Observation]:
-        last_commit = context.state.get("git.last_commit")
+        last_commit = context.get_state("git","last_commit")
         try:
             if last_commit:
                 output = self.git.run(
                     "log",
                     f"{last_commit}..HEAD",
-                    "--format=%H|%aI|%s",
+                    "--format=%H|%P|%aI|%an|%s",
                 )
             else:
                 output = self.git.run(
                     "log",
-                    "--format=%H|%aI|%s",
+                    "--format=%H|%P|%aI|%an|%s",
                 )
         except subprocess.CalledProcessError:
             return []
@@ -35,7 +36,12 @@ class GitScanner(Scanner):
             if not line:
                 continue
             
-            commit_hash, timestamp, msg = line.split("|",2)
+            commit_hash, parents, timestamp, author, msg = line.split("|",4)
+            
+            parents_hash = parents.split() if parents else []
+            
+            changes = self.get_changed_file(commit_hash=commit_hash)
+            
             observation.append(Observation(
                 source="git",
                 type="commit",
@@ -43,8 +49,43 @@ class GitScanner(Scanner):
                 timestamp=datetime.fromisoformat(timestamp),
                 data={
                     "hash":commit_hash,
-                    "message":msg
+                    "message":msg,
+                    "author":author,
+                    "parents":parents_hash,
+                    "changes": [
+                        {
+                            "path": change.path,
+                            "status": change.status,
+                        }
+                        for change in changes
+                    ]
                 }
             ))
             
         return observation
+    
+    def get_changed_file(self,commit_hash:str) -> list[FileChange]:
+        changes_observed = self.git.run(
+            "diff-tree",
+            "--no-commit-id",
+            "--name-status",
+            "-r",
+            commit_hash,
+        )
+        
+        changes = []
+        for line in changes_observed.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            
+            status, path = line.split("\t", 1)
+
+            changes.append(
+                FileChange(
+                    path=path,
+                    status=status,
+                )
+            )
+            
+        return changes

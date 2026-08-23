@@ -44,17 +44,18 @@ def scan():
     
     created_count = 0
     
-    for observation in observations:
-        if repo.save(observation=observation):
-            created_count+=1
+    with connection:
+        for observation in observations:
+            if repo.save(observation=observation):
+                created_count+=1
     
-    if observations:
-        newest_commit = observations[0].external_id
-        scan_state.set(
-            "last_commit",
-            "git",
-            newest_commit
-        )
+        if observations:
+            newest_commit = observations[0].external_id
+            scan_state.set(
+                "last_commit",
+                "git",
+                newest_commit
+            )
         
     connection.close()
     

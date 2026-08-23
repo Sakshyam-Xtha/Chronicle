@@ -26,6 +26,4 @@ class ObservationRepo:
             ),
         )
         
-        self.conn.commit()
-        
         return cursor.rowcount == 1

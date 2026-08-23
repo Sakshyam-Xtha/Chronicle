@@ -42,4 +42,3 @@ class ScanStateRepo:
             )
         )
         
-        self.conn.commit()
