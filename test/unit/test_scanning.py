@@ -1,8 +1,8 @@
 from datetime import datetime
 from pathlib import Path
 
-from chronicle.scanners.base import Scanner
-from chronicle.scanners.models import Observation
+from chronicle.scanning.scanners.base import Scanner
+from chronicle.storage.models import Observation
 from chronicle.scanning.context import ScanContext
 from chronicle.scanning.engine import ScanEngine
 

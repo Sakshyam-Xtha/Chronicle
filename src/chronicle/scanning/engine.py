@@ -1,6 +1,6 @@
 from pathlib import Path
-from chronicle.scanners.base import Scanner
-from chronicle.scanners.models import Observation
+from chronicle.scanning.scanners.base import Scanner
+from chronicle.storage.models import Observation
 from .context import ScanContext
 
 class ScanEngine:

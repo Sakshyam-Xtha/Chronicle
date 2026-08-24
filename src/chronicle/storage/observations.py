@@ -1,6 +1,6 @@
 import json
 import sqlite3
-from chronicle.scanners.models import Observation
+from chronicle.storage.models import Observation
 from datetime import datetime
 
 class ObservationRepo:

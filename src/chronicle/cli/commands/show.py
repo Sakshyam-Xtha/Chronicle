@@ -5,6 +5,7 @@ from chronicle.config.loader import get_chronicle_directory
 from chronicle.project.discovery import find_project_root
 
 def show(id:int | None = typer.Option(None, "--id")):
+    """Shows all the observations done by chronicle or shows observation by id using --id."""
     project_root = find_project_root()
     if project_root is None:
             typer.echo("Error: could not find git repo.",err=True)
@@ -12,7 +13,6 @@ def show(id:int | None = typer.Option(None, "--id")):
     db_path = (get_chronicle_directory(project_root) / "chronicle.db")
     conn = connect(db_path)
     if id:
-        """Shows observation by id."""
         observation, = ObservationRepo(conn).list_all(id)
         typer.echo()
         typer.echo(f"Observation #{id}")
@@ -70,7 +70,6 @@ def show(id:int | None = typer.Option(None, "--id")):
         typer.echo()
         typer.echo("─" * 44)
     else:
-        """Shows all the observations done by chronicle."""
         observations = ObservationRepo(conn).list_all()
         
         typer.echo()

@@ -1,10 +1,9 @@
 import typer
 from chronicle.project.discovery import find_project_root
-from chronicle.scanners.git import GitScanner
-from chronicle.scanners.django_migrations import DjangoMigrationScanner
+from chronicle.scanning.scanners.git import GitScanner
+from chronicle.scanning.scanners.django_migrations import DjangoMigrationScanner
 from chronicle.scanning.engine import ScanEngine
 from chronicle.config.loader import get_chronicle_directory
-from chronicle.storage.schema import init_schema
 from chronicle.storage.database import connect
 from chronicle.storage.observations import ObservationRepo
 from chronicle.storage.scan_state import ScanStateRepo
@@ -19,7 +18,6 @@ def scan():
     
     db_path = (get_chronicle_directory(project_root) / "chronicle.db")
     connection = connect(database_path=db_path)
-    init_schema(connection=connection)
     scan_state = ScanStateRepo(connection)
     repo = ObservationRepo(connection)
     last_commit = scan_state.get(

@@ -2,7 +2,7 @@ import subprocess
 from pathlib import Path
 from datetime import datetime
 from chronicle.integrations.git import GitIntegration
-from .models import Observation
+from ...storage.models import Observation
 from .git_models import FileChange
 from .base import Scanner
 from chronicle.scanning.context import ScanContext

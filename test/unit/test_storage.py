@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from chronicle.scanners.models import Observation
+from chronicle.storage.models import Observation
 from chronicle.storage.database import connect
 from chronicle.storage.observations import ObservationRepo
 from chronicle.storage.scan_state import ScanStateRepo

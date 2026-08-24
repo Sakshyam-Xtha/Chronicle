@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from .models import Observation
+from ...storage.models import Observation
 from chronicle.scanning.context import ScanContext
 
 class Scanner(ABC):

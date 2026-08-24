@@ -1,5 +1,7 @@
 from pathlib import Path
 from chronicle.config.loader import *
+from chronicle.storage.schema import init_schema
+from chronicle.storage.database import connect
 
 def initialize_chronicle(project_root:Path) -> tuple[Path, bool]:
     chronicle_directory = get_chronicle_directory(project_root)
@@ -8,6 +10,9 @@ def initialize_chronicle(project_root:Path) -> tuple[Path, bool]:
     db_path = chronicle_directory / "chronicle.db"
     if not db_path.exists():
         db_path.touch()
+        
+    conn = connect(db_path)
+    init_schema(conn)
     
     config_path = get_config_path(project_root)
     created = False

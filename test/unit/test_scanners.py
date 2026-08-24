@@ -4,10 +4,10 @@ import subprocess
 
 import pytest
 
-from chronicle.scanners.base import Scanner
-from chronicle.scanners.git import GitScanner
-from chronicle.scanners.git_models import FileChange
-from chronicle.scanners.models import Observation
+from chronicle.scanning.scanners.base import Scanner
+from chronicle.scanning.scanners.git import GitScanner
+from chronicle.scanning.scanners.git_models import FileChange
+from chronicle.storage.models import Observation
 from chronicle.scanning.context import ScanContext
 
 LOG_FORMAT = "%H|%P|%aI|%an|%s"

@@ -17,7 +17,20 @@ CREATE TABLE IF NOT EXISTS scan_state(
     value TEXT NOT NULL,
     updated_at TEXT NOT NULL,
     PRIMARY KEY(scanner , key)
-)
+);
+
+CREATE TABLE IF NOT EXISTS findings(
+    analyzer TEXT NOT NULL,
+    severity TEXT NOT NULL,
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    observation_id INTEGER,
+    data TEXT NOT NULL,
+    FOREIGN KEY (observation_id)
+    REFERENCES observations (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
 """
 
 def init_schema(connection:sqlite3.Connection) -> None:

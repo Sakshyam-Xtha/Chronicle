@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 
 from chronicle.scanning.context import ScanContext
-from chronicle.scanners.git import GitScanner
+from chronicle.scanning.scanners.git import GitScanner
 
 GIT_IDENTITY = [
     "-c",
