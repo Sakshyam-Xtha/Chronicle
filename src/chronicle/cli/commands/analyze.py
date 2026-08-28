@@ -1,6 +1,7 @@
 import typer
 from chronicle.analysis.engine import AnalyzeEngine
 from chronicle.analysis.analyzers.git import GitAnalyzer
+from chronicle.analysis.analyzers.django_migrations import DjangoMigrationAnalyzer
 from chronicle.config.loader import get_chronicle_directory
 from chronicle.project.discovery import find_project_root
 from chronicle.storage.database import connect
@@ -38,6 +39,7 @@ def analyze():
         repo = FindingsRepo(conn)
         analyzers = [
             GitAnalyzer(project_root),
+            DjangoMigrationAnalyzer(project_root),
         ]
         engine = AnalyzeEngine(analyzers) #type: ignore
         findings = engine.analyze(context)
@@ -49,15 +51,23 @@ def analyze():
                 if repo.save(finding):
                     finding_count +=1
          
-        if observations:
-            newest_obs_id = max(
-                observation.id for observation in observations
-            ) 
-            
-            analysis_state.set(
-                "last_observation_id",
-                "analysis",
-                str(newest_obs_id)
-            )       
+            if observations:
+                newest_obs_id = max(
+                    observation.id for observation in observations #type: ignore
+                ) 
+                
+                analysis_state.set(
+                    "last_observation_id",
+                    "analysis",
+                    str(newest_obs_id)
+                )       
         typer.echo(f"Analyzed and stored {finding_count} findings.")
+        typer.echo(
+            f"Last analyzed observation: {last_obs_id}"
+        )
+
+        typer.echo(
+            f"Observations being analyzed: "
+            f"{[observation.id for observation in observations]}"
+        )
             
