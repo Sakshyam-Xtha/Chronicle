@@ -1,6 +1,7 @@
 from abc import ABC,abstractmethod
 from pathlib import Path
 from chronicle.storage.models import Observation,Findings
+from chronicle.analysis.context import AnalysisContext
 
 class BaseAnalyzer(ABC):
     """Base class for all chronicle analyzers."""
@@ -9,6 +10,6 @@ class BaseAnalyzer(ABC):
         self.project_root = project_root
         
     @abstractmethod
-    def analyze(self, observations:list[Observation]) -> list[Findings]:
+    def analyze(self, context:AnalysisContext) -> list[Findings]:
         """Analyze the project and return findings."""
         pass

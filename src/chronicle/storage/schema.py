@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS findings(
     message TEXT NOT NULL,
     observation_id INTEGER,
     data TEXT NOT NULL,
+    UNIQUE(analyzer,observation_id,data),
     FOREIGN KEY (observation_id)
     REFERENCES observations (id)
         ON DELETE CASCADE

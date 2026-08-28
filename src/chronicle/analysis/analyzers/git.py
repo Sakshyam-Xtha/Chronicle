@@ -2,14 +2,15 @@ from pathlib import Path
 
 from chronicle.storage.models import Observation,Findings
 from .base import BaseAnalyzer
+from chronicle.analysis.context import AnalysisContext
 
 class GitAnalyzer(BaseAnalyzer):
     def __init__(self, project_root: Path) -> None:
         super().__init__(project_root)
         
-    def analyze(self,observations:list[Observation]) -> list[Findings]:
+    def analyze(self,context:AnalysisContext) -> list[Findings]:
         findings = []
-        for observation in observations:
+        for observation in context.observations:
             if observation.type != "commit":
                 continue
             if observation.source != "git":

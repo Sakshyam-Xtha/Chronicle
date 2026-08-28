@@ -9,10 +9,10 @@ class AnalyzeEngine:
     def __init__(self, analyzers:list[BaseAnalyzer]) -> None:
         self.analyzers = analyzers
         
-    def analyze(self,observations:list[Observation]) -> list[Findings]:
+    def analyze(self,context:AnalysisContext) -> list[Findings]:
         findings = []
         for analyzer in self.analyzers:
-            analyzer_findings = analyzer.analyze(observations)
+            analyzer_findings = analyzer.analyze(context)
             findings.extend(analyzer_findings)
             
         return findings

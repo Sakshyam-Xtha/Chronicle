@@ -1,18 +1,18 @@
 from chronicle.analysis.analyzers.base import BaseAnalyzer
 from chronicle.storage.models import Findings
 from chronicle.storage.observations import Observation
-
+from chronicle.analysis.context import AnalysisContext
 
 class DjangoMigrationAnalyzer(BaseAnalyzer):
 
     def analyze(
         self,
-        observations: list[Observation],
+        context: AnalysisContext
     ) -> list[Findings]:
 
         findings = []
 
-        for observation in observations:
+        for observation in context.observations:
 
             if observation.source != "django":
                 continue
