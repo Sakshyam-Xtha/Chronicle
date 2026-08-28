@@ -19,6 +19,14 @@ CREATE TABLE IF NOT EXISTS scan_state(
     PRIMARY KEY(scanner , key)
 );
 
+CREATE TABLE IF NOT EXISTS analysis_state(
+    analyzer TEXT NOT NULL,
+    key TEXT NOT NULL,
+    value TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY(analyzer , key)
+);
+
 CREATE TABLE IF NOT EXISTS findings(
     analyzer TEXT NOT NULL,
     severity TEXT NOT NULL,

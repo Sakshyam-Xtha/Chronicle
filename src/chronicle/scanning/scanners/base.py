@@ -11,6 +11,7 @@ class Scanner(ABC):
         self.project_root = project_root
         
     @abstractmethod
-    def scan(self,context:ScanContext) -> list[Observation]:
+    def scan(self,contexts:list[ScanContext]) -> list[Observation]:
         """Scan the project and return observation"""
         pass
+    

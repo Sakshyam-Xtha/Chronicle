@@ -1,5 +1,8 @@
 from pathlib import Path
-from .analyzers.base import BaseAnalyzer
+from chronicle.analysis.context import AnalysisContext
+
+
+from chronicle.analysis.analyzers.base import BaseAnalyzer
 from chronicle.storage.models import Observation,Findings
 
 class AnalyzeEngine:

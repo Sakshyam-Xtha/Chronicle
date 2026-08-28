@@ -8,9 +8,9 @@ class ScanEngine:
         self.project_root = project_root
         self.scanners = scanners
         
-    def scan(self,context:ScanContext) -> list[Observation]:
+    def scan(self,contexts:list[ScanContext]) -> list[Observation]:
         observation:list[Observation] = []
         for scanner in self.scanners:
-            observation.extend(scanner.scan(context=context))
+            observation.extend(scanner.scan(contexts=contexts))
         
         return observation

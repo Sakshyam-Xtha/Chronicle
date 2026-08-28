@@ -14,8 +14,11 @@ class GitScanner(Scanner):
         super().__init__(project_root)
         self.git = GitIntegration(project_root)
     
-    def scan(self,context:ScanContext) -> list[Observation]:
-        last_commit = context.get_state("git","last_commit")
+    def scan(self,contexts:list[ScanContext]) -> list[Observation]:
+        for context in contexts:
+            last_commit = context.get_state("git","last_commit")
+            if last_commit:
+                break
         try:
             if last_commit:
                 output = self.git.run(

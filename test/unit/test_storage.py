@@ -10,7 +10,7 @@ from chronicle.storage.database import connect
 from chronicle.storage.observations import ObservationRepo
 from chronicle.storage.scan_state import ScanStateRepo
 from chronicle.storage.schema import init_schema
-
+from chronicle.storage.analysis_state import AnalysisStateRepo
 
 def _observation(**overrides) -> Observation:
     values = {

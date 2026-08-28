@@ -24,11 +24,21 @@ def scan():
         "last_commit",
         "git",
     )
-    context = ScanContext(
+    last_migration = scan_state.get(
+        "last_migration",
+        "django_migrations",
+    )
+    git_context = ScanContext(
         state={
             "git.last_commit":last_commit,
         }
     )
+    django_context = ScanContext(
+        state={
+            "django_migrations.last_migration":last_migration,
+        }
+    )
+    contexts = [git_context,django_context]
     
     scanners = [
         GitScanner(project_root),
@@ -40,21 +50,32 @@ def scan():
         scanners=scanners, #type: ignore
     )
     
-    observations = engine.scan(context=context)
+    observations = engine.scan(contexts=contexts)
     
     created_count = 0
+    
+    git_observations = [ observation for observation in observations if observation.source == "git"]
+    
+    django_observations = [ observation for observation in observations if observation.source == "django"]
     
     with connection:
         for observation in observations:
             if repo.save(observation=observation):
                 created_count+=1
     
-        if observations:
-            newest_commit = observations[0].external_id
+        if git_observations:
+            newest_commit = git_observations[0].external_id
             scan_state.set(
                 "last_commit",
                 "git",
                 newest_commit
+            )
+        if django_observations:
+            newest_migration = django_observations[-1].external_id
+            scan_state.set(
+                "last_migration",
+                "django_migrations",
+                newest_migration
             )
         
     connection.close()
@@ -63,5 +84,4 @@ def scan():
         typer.echo(f"Collected {len(observations)} observation(s).")
         typer.echo(f"Stored {created_count} new observation(s)")
     else:
-        typer.echo(f"Collected {len(observations)} observation(s).")
         typer.echo(f"All observation(s) already stored.")

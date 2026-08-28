@@ -10,9 +10,23 @@ class DjangoMigrationScanner(Scanner):
     def __init__(self, project_root: Path) -> None:
         super().__init__(project_root)
         
-    def scan(self, context: ScanContext) -> list[Observation]:
+    def scan(self, contexts: list[ScanContext]) -> list[Observation]:
         observation = []
+        last_migration = None
+        last_migration_name = None
+        last_app = None
+        for context in contexts:
+            last_migration = context.get_state("django_migrations",".last_migration")
+            if last_migration:
+                break
         for migration_file in self._find_migrations():
+            migration_name = migration_file.stem
+            app_label = migration_file.parent.parent.name
+            if last_migration:
+                last_app , last_migration_name = last_migration.split(":",1,)
+                if app_label == last_app:
+                    if self._migration_num(migration_name) <= self._migration_num(last_migration_name):
+                        continue
             observation.append(
                 self._parse_migration(
                     migration_file
@@ -137,3 +151,6 @@ class DjangoMigrationScanner(Scanner):
             )
 
         return operations
+    
+    def _migration_num(self,migration_name:str) -> int:
+        return int(migration_name.split("_",1)[0])
