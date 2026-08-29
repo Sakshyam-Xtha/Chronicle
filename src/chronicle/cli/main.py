@@ -6,6 +6,7 @@ from chronicle.cli.commands.scan import scan
 from chronicle.cli.commands.show import show
 from chronicle.cli.commands.analyze import analyze
 from chronicle.cli.commands.config import config_app
+from chronicle.cli.commands.interpret import interpret
 
 app = typer.Typer(
     name="chronicle",
@@ -19,6 +20,7 @@ app.command(name="status")(status)
 app.command(name="scan")(scan)
 app.command(name="show")(show)
 app.command(name="analyze")(analyze)
+app.command(name="interpret")(interpret)
 app.add_typer(
     config_app,
     name="config"

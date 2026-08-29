@@ -1,7 +1,8 @@
 import os 
 
 PROVIDER_ENV_VARS = {
-    "openai": "OPENAI_API_KEY"
+    "openai": "OPENAI_API_KEY",
+    "gemini": "GEMINI_API_KEY"
 }
 
 def get_api_key(provider: str) -> str | None:

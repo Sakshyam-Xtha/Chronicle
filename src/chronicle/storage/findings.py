@@ -30,3 +30,24 @@ class FindingsRepo:
         )
         
         return cursor.rowcount == 1
+    
+    def list_all(self) -> list[Findings]:
+        findings = []
+        
+        rows = self.conn.execute(
+        """
+        SELECT * FROM findings ORDER BY observation_id;
+        """
+        ).fetchall()
+        
+        for row in rows:
+            findings.append(Findings(
+                analyzer=row["analyzer"],
+                severity=row["severity"],
+                title=row["title"],
+                message=row["message"],
+                observation_id=row["observation_id"],
+                data=json.loads(row["data"]),
+            ))
+            
+        return findings
