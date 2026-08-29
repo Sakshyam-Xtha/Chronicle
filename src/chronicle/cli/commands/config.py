@@ -3,7 +3,7 @@ import typer
 from chronicle.project.discovery import find_project_root
 from chronicle.config.loader import *
 from chronicle.config.manager import *
-from chronicle.config.credentials import has_api_key
+from chronicle.config.credentials import has_api_key,set_api_key
 
 config_app = typer.Typer(
     help="Manage Chronicle configuration."
@@ -18,6 +18,7 @@ def set_config(
     project_root = find_project_root()
     if project_root:
         config_path = get_config_path(project_root)
+        config = load_config(config_path)
         if key == "provider":   
             update_ai_config(
                 config_path,
@@ -28,8 +29,12 @@ def set_config(
                 config_path,
                 model=value,
             )
+        elif key == "api_key":
+            if config["ai"]["provider"] != "":
+                set_api_key(provider=config["ai"]["provider"],api_key=value)
         else:
             typer.echo(f"Unknown config key: {key}")
+            typer.echo("Available key: provider, model, api_key")
             raise typer.Exit(1)
         
         typer.echo(

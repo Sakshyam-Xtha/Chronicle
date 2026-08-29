@@ -1,16 +1,17 @@
 import os 
+import keyring
 
-PROVIDER_ENV_VARS = {
-    "openai": "OPENAI_API_KEY",
-    "gemini": "GEMINI_API_KEY"
-}
+SERVICE_NAME = "chronicle"
+
+def set_api_key(provider:str,api_key:str):
+    keyring.set_password(
+        SERVICE_NAME,
+        provider,
+        api_key
+    )
 
 def get_api_key(provider: str) -> str | None:
-    env_var = PROVIDER_ENV_VARS.get(provider)
-    if env_var is None:
-        return None
-    
-    return os.getenv(env_var)
+    return keyring.get_password(SERVICE_NAME,provider)
 
 def has_api_key(provider: str) -> bool:
     return get_api_key(provider) is not None

@@ -1,6 +1,6 @@
 import typer
 from chronicle.project.discovery import find_project_root
-from chronicle.project.initializer import initialize_chronicle
+from chronicle.project.initializer import initialize_chronicle,setup_ai_config
 
 def init():
     """Initialize chronicle in a project"""
@@ -26,7 +26,18 @@ def init():
         typer.echo("   ✓ Project detected")
         typer.echo("   ✓ Chronicle directory created")
         typer.echo("   ✓ Local database initialized")
+        typer.echo("   ✓ Initialized NLTK tokenizer")
         typer.echo()
+        
+        choice = typer.prompt("   Configure AI now?[Y/n] ").lower()
+        if choice == "y":
+            setup_ai_config(config_path=config_path)
+            typer.echo("   ✓ AI successfully configured.")
+            typer.echo()
+        else:
+            typer.echo("   AI not configured.")
+            typer.echo("   Use chronicle set command to configure AI.")
+            typer.echo()
 
         typer.echo("   Chronicle is ready.")
         typer.echo()

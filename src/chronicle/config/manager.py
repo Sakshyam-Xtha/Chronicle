@@ -1,11 +1,6 @@
 from pathlib import Path
-try:
-    import tomllib #type:ignore
-except ModuleNotFoundError:
-    import tomli as tomllib
-import tomli_w
-    
 from chronicle.config.loader import *
+import tomli_w
 
 DEFAULT_CONFIG = """\
 [chronicle]
@@ -15,6 +10,17 @@ version=1
 provider=""
 model=""
 """
+
+def create_gitignore(project_root:Path):
+    gitignore_path = project_root / ".gitignore"
+    if not gitignore_path.exists():
+        gitignore_path.write_text(".chronicle/\n")
+        return
+    existing_content = gitignore_path.read_text()
+    if ".chronicle/" in existing_content.splitlines():
+        return
+    with gitignore_path.open(mode="a") as file: 
+        file.write("\n.chronicle/\n")
 
 def create_config(config_path:Path) -> bool:
     if not config_path.exists():
