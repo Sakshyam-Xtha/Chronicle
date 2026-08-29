@@ -1,0 +1,12 @@
+typer>=0.16
+tomli-w>=1.2.0
+openai>=3.6.0
+nltk>=3.10.3
+google-genai>=2.20.0
+keyring>=25.7.0
+
+[:python_version < "3.11"]
+tomli>=2.0.0
+
+[dev]
+pytest>=8.0

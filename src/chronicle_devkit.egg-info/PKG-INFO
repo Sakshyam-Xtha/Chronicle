@@ -1,15 +1,27 @@
-# Chronicle
+Metadata-Version: 2.4
+Name: chronicle-devkit
+Version: 0.1.0
+Summary: A local first developer intelligence tool
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: typer>=0.16
+Requires-Dist: tomli-w>=1.2.0
+Requires-Dist: openai>=3.6.0
+Requires-Dist: nltk>=3.10.3
+Requires-Dist: google-genai>=2.20.0
+Requires-Dist: keyring>=25.7.0
+Requires-Dist: tomli>=2.0.0; python_version < "3.11"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
 
-![PyPI - Version](https://img.shields.io/pypi/v/chronicle-devkit)
-![PyPI - Python Versions](https://img.shields.io/pypi/pyversions/chronicle-devkit)
-![PyPI - License](https://img.shields.io/pypi/l/chronicle-devkit)
+# Chronicle
 
 **Local-first developer intelligence.** Chronicle records how a software project changes over time, turns that history into signals, and lets you ask questions about it — all stored and analyzed on your own machine.
 
 Chronicle fits naturally into your existing workflow. Point it at a Git project, and it:
 
-1. **Scans** your project's history into structured _observations_ (git commits, Django migrations).
-2. **Analyzes** those observations into actionable _findings_ (new files, changed schema fields …).
+1. **Scans** your project's history into structured *observations* (git commits, Django migrations).
+2. **Analyzes** those observations into actionable *findings* (new files, changed schema fields …).
 3. **Interprets** the collected history with AI, answering questions in plain language.
 
 ## How it works
@@ -32,23 +44,18 @@ Django migrations ─┘                     local SQLite     ▲
 
 ## Installation
 
-Chronicle is published on PyPI as **`chronicle-devkit`**. Install it with pip (a virtual environment is recommended but not required):
-
 ```bash
-# create and activate a virtual environment (optional but recommended)
+# clone and enter the repository
+git clone https://github.com/Sakshyam-Xtha/Chronicle.git
+cd Chronicle
+
+# create a virtual environment (optional but recommended)
 python -m venv .venv
 source .venv/bin/activate
 
-# install from PyPI
-pip install chronicle-devkit
+# install in editable mode (includes the `chronicle` command)
+pip install -e ".[dev]"
 ```
-
-> Installing from source (for development) instead:
-> ```bash
-> git clone https://github.com/Sakshyam-Xtha/Chronicle.git
-> cd Chronicle
-> pip install -e ".[dev]"
-> ```
 
 Verify the CLI is on your path:
 
@@ -81,16 +88,16 @@ chronicle interpret --question "When did we add the User model?"
 
 ## Command reference
 
-| Command                                   | Description                                                              |
-| ----------------------------------------- | ------------------------------------------------------------------------ |
-| `chronicle init`                          | Create the `.chronicle/` directory and initialize the local database     |
-| `chronicle scan`                          | Scan project history into observations (git commits, Django migrations)  |
-| `chronicle show`                          | List all observations; `--id <n>` shows one observation in detail        |
-| `chronicle analyze`                       | Turn observations into findings via the installed analyzers              |
-| `chronicle interpret --question "<text>"` | Ask an AI-backed question about the project history                      |
-| `chronicle config`                        | View current configuration; `set provider` / `set model` to configure AI |
-| `chronicle status`                        | Show whether the project is initialized and detected                     |
-| `chronicle version`                       | Print the Chronicle version                                              |
+| Command | Description |
+| --- | --- |
+| `chronicle init` | Create the `.chronicle/` directory and initialize the local database |
+| `chronicle scan` | Scan project history into observations (git commits, Django migrations) |
+| `chronicle show` | List all observations; `--id <n>` shows one observation in detail |
+| `chronicle analyze` | Turn observations into findings via the installed analyzers |
+| `chronicle interpret --question "<text>"` | Ask an AI-backed question about the project history |
+| `chronicle config` | View current configuration; `set provider` / `set model` to configure AI |
+| `chronicle status` | Show whether the project is initialized and detected |
+| `chronicle version` | Print the Chronicle version |
 
 ### `chronicle status`
 
@@ -118,7 +125,6 @@ Timestamp:    2026-08-21 12:00:00 UTC
 Data
 ────────────────────────────────────────────
 ```
-
 Migration observations additionally show **App**, **Migration**, **Dependencies**, and **Operations** (model / field per operation).
 
 ## Configuring AI (for `interpret`)
@@ -220,7 +226,7 @@ The suite is split into:
 
 ## Roadmap / status
 
-Chronicle is an early-stage local-first tool. It is published on PyPI as **`chronicle-devkit`** (`0.1.0`). Current scanners cover **git** and **Django migrations**; analyzers cover **git file additions** and **Django schema changes**; AI interpretation supports **OpenAI** and **Gemini**.
+Chronicle is an early-stage local-first tool (`0.1.0`). Current scanners cover **git** and **Django migrations**; analyzers cover **git file additions** and **Django schema changes**; AI interpretation supports **OpenAI** and **Gemini**.
 
 ## License
 
