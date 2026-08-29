@@ -1,6 +1,0 @@
-[chronicle]
-version = 1
-
-[ai]
-provider = "gemini"
-model = "gemini-3.5-flash"
