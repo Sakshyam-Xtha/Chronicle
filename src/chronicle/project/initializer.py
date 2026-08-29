@@ -1,5 +1,6 @@
 from pathlib import Path
 from chronicle.config.loader import *
+from chronicle.config.manager import *
 from chronicle.storage.schema import init_schema
 from chronicle.storage.database import connect
 
@@ -15,12 +16,6 @@ def initialize_chronicle(project_root:Path) -> tuple[Path, bool]:
     init_schema(conn)
     
     config_path = get_config_path(project_root)
-    created = False
-    
-    if not config_path.exists():
-        config_path.write_text(
-            "[chronicle]\nversion = 1\n"
-        )
-        created = True
+    created = create_config(config_path)
     
     return config_path,created

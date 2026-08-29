@@ -5,6 +5,7 @@ requires-python = ">=3.10"
 description = "A local first developer intelligence tool"
 dependencies = [
     "typer>=0.16",
+    "tomli-w>=1.2.0"
 ]
 
 [project.optional-dependencies]
